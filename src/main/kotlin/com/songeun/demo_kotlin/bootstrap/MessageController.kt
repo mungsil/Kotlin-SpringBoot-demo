@@ -14,7 +14,14 @@ import java.net.URI
 
 @RestController
 @RequestMapping("/api")
-class MessageController (private val saveMessageUsecase : SaveMessageUsecase) {
+class MessageController (
+    /**
+     * Demonstrates Kotlin features:
+     * - Primary constructor as part of the class header,
+     *   placed after the class name and optional type parameters
+     */
+    private val saveMessageUsecase : SaveMessageUsecase
+) {
 
     /**
      * Demonstrates Kotlin features:
@@ -37,6 +44,10 @@ class MessageController (private val saveMessageUsecase : SaveMessageUsecase) {
         CreateMessageRequest("3", "Privet!"),
         CreateMessageRequest("4", "안녕하세요!"),
     )
+
+
+    @GetMapping("/v3/messages")
+    fun findMessages(@RequestParam id : String) = "sdfdf"
 
     @PostMapping("/v3/messages")
     fun save(@RequestBody req: CreateMessageRequest) : ResponseEntity<SavedMessage> {
