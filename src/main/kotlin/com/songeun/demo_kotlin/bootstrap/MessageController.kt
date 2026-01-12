@@ -1,13 +1,20 @@
 package com.songeun.demo_kotlin.bootstrap
 
+import com.songeun.demo_kotlin.application.port.`in`.SaveCommand
+import com.songeun.demo_kotlin.application.port.`in`.SaveMessageUsecase
+import com.songeun.demo_kotlin.application.port.out.SavedMessage
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.net.URI
 
 @RestController
 @RequestMapping("/api")
-class MessageController {
+class MessageController (private val saveMessageUsecase : SaveMessageUsecase) {
 
     /**
      * Demonstrates Kotlin features:
@@ -25,10 +32,20 @@ class MessageController {
      */
     @GetMapping("/v2/messages")
     fun listMessages() = listOf(
-        Message("1", "Hello!"),
-        Message("2", "Bonjour!"),
-        Message("3", "Privet!"),
-        Message("4", "안녕하세요!"),
+        CreateMessageRequest("1", "Hello!"),
+        CreateMessageRequest("2", "Bonjour!"),
+        CreateMessageRequest("3", "Privet!"),
+        CreateMessageRequest("4", "안녕하세요!"),
     )
+
+    @PostMapping("/v3/messages")
+    fun save(@RequestBody req: CreateMessageRequest) : ResponseEntity<SavedMessage> {
+        val savedMessage = saveMessageUsecase.saveMessage(
+            SaveCommand(req.id, req.text)
+        )
+        return ResponseEntity
+            .created(URI("/${savedMessage.id}"))
+            .body(savedMessage)
+    }
 
 }

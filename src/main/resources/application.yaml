@@ -1,3 +1,25 @@
 spring:
   application:
     name: demo-kotlin
+
+  # H2 데이터베이스 설정 추가
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # H2 웹 콘솔 설정 (브라우저에서 DB 확인용)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # JPA 사용 시 H2에 최적화된 SQL 생성 설정
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
