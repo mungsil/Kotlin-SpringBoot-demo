@@ -16,10 +16,9 @@ class MessageService(private val repository: MessageRepositoryPort) : SaveMessag
     }
 
     private fun mapToEntity(command: SaveCommand): MessageEntity {
-        if (command.text == null){
-            return MessageEntity(command.id, "기본 메시지입니다.")
-        }
-        return MessageEntity(command.id, command.text)
+        // Elvis operator - ?:
+        val content = command.text ?: "기본 메시지입니다."
+        return MessageEntity(command.id, content)
     }
 
 }
